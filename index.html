@@ -23,7 +23,6 @@
                 <h2>Chat</h2>
             </div>
             <ul class="list-group p-3 messages">
-
             </ul>
         </div>
     </div>
@@ -60,6 +59,13 @@
         messageElement.append(messageHeader, text);
         listElement.append(messageElement, time)
         return listElement;
+    }
+
+    async function getMessages(){
+        const newMessages = await axios.get('/messages')
+        for(let message of newMessages.data){
+            addMesagges(message)
+        }
     }
 </script>
 </body>
