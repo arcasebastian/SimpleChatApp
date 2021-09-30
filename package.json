@@ -1,0 +1,22 @@
+{
+  "name": "didactic-meme",
+  "version": "1.0.0",
+  "description": "Node.JS and Socket.IO test App",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/arcasebastian/didactic-meme.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/arcasebastian/didactic-meme/issues"
+  },
+  "homepage": "https://github.com/arcasebastian/didactic-meme#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
