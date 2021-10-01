@@ -14,6 +14,7 @@ const dbUrl = `mongodb+srv://${credentials.dbUser}:${credentials.dbPass}@${crede
 const MessageModel = mongoose.model("Message", {
   name: { type: String, required: true },
   text: { type: String, required: true },
+  time: { type: String, required: true },
 });
 
 app.get("/messages", (req, res) => {
@@ -24,10 +25,11 @@ app.get("/messages", (req, res) => {
 });
 app.post("/messages", async (req, res) => {
   const newMessage = new MessageModel(req.body);
+  newMessage.time = new Date().toLocaleString();
   await newMessage.save().catch((err) => {
     res.sendStatus(500);
   });
-  io.emit("message", req.body);
+  io.emit("message", newMessage.toJSON());
   res.sendStatus(200);
 });
 

@@ -14,10 +14,11 @@ messageForm.addEventListener("submit", (e) => {
 
 function addMesagges(message) {
   const messagesArea = document.querySelector(".messages");
-  messagesArea.append(formatMesage(message));
+  messagesArea.prepend(formatMesage(message));
 }
 
-function formatMesage({ name, text }) {
+function formatMesage(message) {
+  const { name, text, time } = message;
   const listElement = document.createElement("li");
   listElement.classList.add(
     "list-group-item",
@@ -30,10 +31,10 @@ function formatMesage({ name, text }) {
   const messageHeader = document.createElement("div");
   messageHeader.classList.add("fw-bold");
   messageHeader.innerHTML = `<h4>${name}</h4>`;
-  const time = document.createElement("span");
-  time.innerText = new Date().toLocaleString();
+  const timeSpan = document.createElement("span");
+  timeSpan.innerText = time;
   messageElement.append(messageHeader, text);
-  listElement.append(messageElement, time);
+  listElement.append(messageElement, timeSpan);
   return listElement;
 }
 
@@ -52,8 +53,10 @@ const formData = function () {
   const response = {};
   for (let input of [nameInput, textMessage]) {
     const { name, value } = input;
+    if (!value) return false;
     response[name] = value;
   }
+  textMessage.value = "";
   return response;
 };
 getMessages();
