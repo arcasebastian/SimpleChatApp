@@ -24,13 +24,18 @@ app.get("/messages", (req, res) => {
   });
 });
 app.post("/messages", async (req, res) => {
-  const newMessage = new MessageModel(req.body);
-  newMessage.time = new Date().toLocaleString();
-  await newMessage.save().catch((err) => {
+  try {
+    const newMessage = new MessageModel(req.body);
+    newMessage.time = new Date().toLocaleString();
+    await newMessage.save();
+    io.emit("message", newMessage.toJSON());
+    res.sendStatus(200);
+  } catch (error) {
+    console.log(error);
     res.sendStatus(500);
-  });
-  io.emit("message", newMessage.toJSON());
-  res.sendStatus(200);
+  } finally {
+    console.log("finally called");
+  }
 });
 
 io.on("connection", (socket) => {
