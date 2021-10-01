@@ -13,8 +13,12 @@
         <h1 class="text-center p-3">Send Message</h1>
         <form action="#" class="m-3" id="send-message">
             <div class="form-floating mb-3">
-                <input type="text" id="name" class="form-control" placeholder="Name">
+                <input type="text" id="name" name="name" class="form-control" placeholder="Name">
                 <label for="name">Name</label>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="text" id="text" name="text" class="form-control" placeholder="Name">
+                <label for="name">Text</label>
             </div>
             <button type="submit" class="btn btn-success">Send</button>
         </form>
@@ -33,11 +37,15 @@
         crossorigin="anonymous"></script>
 <script>
     const messageForm = document.querySelector('#send-message');
+
+
     messageForm.addEventListener('submit', (e) => {
         e.preventDefault();
-        const name = document.querySelector('#name').value;
-        if (!name) return;
-        addMesagges({name, text: "hello"})
+        const data = formData();
+        if(!data) return;
+        postMessage(data).then(() => {
+            addMesagges(data)
+        })
     })
 
     function addMesagges(message){
@@ -67,8 +75,22 @@
             addMesagges(message)
         }
     }
+    async function postMessage({name, text}){
+        await axios.post('/messages',
+            {name, text});
+    }
+    const formData = function () {
+        const nameInput = document.querySelector('#name');
+        const textMessage = document.querySelector('#text');
+        const response = {};
+        for (let input of [ nameInput, textMessage ]) {
+            const { name, value,  } = input;
+            response[name] = value;
+        }
+        return response;
+    }
+    getMessages();
 
-    getMessages()
 </script>
 </body>
 </html>
