@@ -31,10 +31,27 @@ app.post("/messages", async (req, res) => {
     io.emit("message", newMessage.toJSON());
     res.sendStatus(200);
   } catch (error) {
-    console.log(error);
     res.sendStatus(500);
-  } finally {
-    console.log("finally called");
+  }
+});
+
+//it is only included as a testing tool
+app.delete("/messages", async (req, res) => {
+  try {
+    const { _id } = req.body;
+    const messages = await MessageModel.find({
+      _id: _id,
+    });
+    if (messages.length > 1) throw "there is more than 1 message";
+    if (messages.length === 0) {
+      res.sendStatus(204);
+      return;
+    }
+    messages.forEach( element => element.delete());
+    res.sendStatus(200);
+  } catch (error) {
+    console.error(error);
+    res.sendStatus(500);
   }
 });
 
@@ -42,6 +59,7 @@ io.on("connection", (socket) => {
   console.log(`Connected client on: ${socket.conn.remoteAddress}`);
 });
 mongoose.connect(dbUrl, {}, (error) => {
+  if (error === null) return
   console.log("Connection error", error);
 });
 http.listen(port, () => {
