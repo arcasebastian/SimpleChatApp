@@ -1,11 +1,14 @@
 const messageForm = document.querySelector("#send-message");
+const socket = io();
+
+socket.on("message", addMesagges);
 
 messageForm.addEventListener("submit", (e) => {
   e.preventDefault();
   const data = formData();
   if (!data) return;
   postMessage(data).then(() => {
-    addMesagges(data);
+    console.log("Message sent");
   });
 });
 
